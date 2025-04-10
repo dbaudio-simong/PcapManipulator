@@ -14,7 +14,8 @@ class PcapManipulator:
         else:
             self.output_file = self._append_fail_to_filename()
 
-        self.packets = rdpcap(self.input_file)
+        packets = rdpcap(input_file)
+        self.packets = packets
         self.remaining_packets = None
 
     def _append_fail_to_filename(self):
@@ -59,6 +60,14 @@ class PcapManipulator:
         """
         packets = rdpcap(filename)
         return packets[start_num - 1:stop_num]
+
+    def update_packet_time(self, packet_num, offset):
+        """Update the timestamp of a packet by a specified offset
+        """
+        # Update the timestamp of the packet
+        print(f"Original packet time is {self.packets[packet_num - 1].time} seconds.")
+        self.packets[packet_num - 1].time += offset
+        print(f"Updated packet time to {self.packets[packet_num - 1].time} seconds.")
 
     def insert_packets(self, start_num, packets):
         """Inserts packets at a specified position in the pcap file
